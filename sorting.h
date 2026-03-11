@@ -2,6 +2,7 @@
 #define SORTING_H
 
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 void bubbleSort(int arr[], int size);
