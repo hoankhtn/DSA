@@ -3,28 +3,69 @@
 
 //Insertion Sort
 void insertionSort(int arr[], int size) {
-    
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
 }
 
 /************************************************ */
 
-//The function to count the number of comparisons in Insertion Sort 
 long long measureInsertionSortComparisons(int arr[], int size) {
-    
+    long long countComp = 0;
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (++countComp && j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return countComp;
 }
 
 /************************************************ */
 
 //Bubble Sort
 void bubbleSort(int arr[], int size) {
-    
+    for (int i = 0; i < size - 1; i++) {
+        bool swapped = false;
+        for (int j = 0; j < size - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j]   = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
 }
 
 /************************************************ */
 
-//The function to count the number of comparisons in Bubble Sort 
 long long measureBubbleSortComparisons(int arr[], int size) {
-    
+    long long countComp = 0;
+    for (int i = 0; i < size - 1; i++) {
+        bool swapped = false;
+        for (int j = 0; j < size - 1 - i; j++) {
+            ++countComp;
+            if (arr[j] > arr[j + 1]) {
+                int temp   = arr[j];
+                arr[j]     = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
+    return countComp;
 }
 
 /************************************************ */
@@ -154,28 +195,77 @@ long long measureMergeSortComparisons(int arr[], int left, int right, long long&
 
 /************************************************ */
 
-//Heap Sort
 void heapify(int arr[], int size, int i) {
-    
+    int largest = i;
+    int left    = 2 * i + 1;
+    int right   = 2 * i + 2;
+
+    if (left < size && arr[left] > arr[largest])
+        largest = left;
+    if (right < size && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        int temp    = arr[i];
+        arr[i]      = arr[largest];
+        arr[largest] = temp;
+        heapify(arr, size, largest);
+    }
 }
 
 void heapSort(int arr[], int size) {
+    for (int i = size / 2 - 1; i >= 0; i--)
+        heapify(arr, size, i);
 
+    for (int i = size - 1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0]   = arr[i];
+        arr[i]   = temp;
+        heapify(arr, i, 0);
+    }
 }
 
 /************************************************ */
 
-//Functions to count the number of comparisons in Heap Sort 
 
 long long measureHeapifyComparisons(int arr[], int size, int i) {
-    
+    long long countComp = 0;
+    while (true) {
+        int largest = i;
+        int left    = 2 * i + 1;
+        int right   = 2 * i + 2;
+
+        if (++countComp && left < size && arr[left] > arr[largest])
+            largest = left;
+        if (++countComp && right < size && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest == i) break;
+
+        int temp     = arr[i];
+        arr[i]       = arr[largest];
+        arr[largest] = temp;
+        i = largest;
+    }
+    return countComp;
 }
 
 long long measureHeapSortComparisons(int arr[], int size) {
-    
-}
+    long long countComp = 0;
 
-/************************************************ */
+    // Build max-heap
+    for (int i = size / 2 - 1; i >= 0; i--)
+        countComp += measureHeapifyComparisons(arr, size, i);
+
+    for (int i = size - 1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0]   = arr[i];
+        arr[i]   = temp;
+        countComp += measureHeapifyComparisons(arr, i, 0);
+    }
+
+    return countComp;
+}
 
 // Shell Sort 
 void shellSort(int arr[], int size) {
