@@ -14,6 +14,7 @@ void countingSort(int arr_o[], int size);
 void shellSort(int arr[], int size);
 void radixSort(int arr[], int size);
 void heapSort(int arr[], int size);
+void flashSort(int arr[], int size);
 
 long long measureBubbleSortComparisons(int arr[], int size);
 long long measureInsertionSortComparisons(int arr[], int size);
@@ -24,4 +25,5 @@ long long measureCountingSortComparisons(int arr_o[], int size);
 long long measureShellSortComparisons(int arr[], int size);
 long long measureRadixSortComparisons(int arr[], int size);
 long long measureHeapSortComparisons(int arr[], int size);
+long long measureFlashSortComparisons(int arr[], int size);
 #endif
