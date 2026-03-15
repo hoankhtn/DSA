@@ -72,9 +72,9 @@ long long measureBubbleSortComparisons(int arr[], int size) {
 
 //Selection Sort
 void selectionSort(int arr[], int size) {
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < size; i++) {
         int min = i;
-        for (int j = i + 1; j < n; j++) {
+        for (int j = i + 1; j < size; j++) {
             if (arr[j] < arr[min]) {
                 min = j;
             }
@@ -88,9 +88,9 @@ void selectionSort(int arr[], int size) {
 //The function to count the number of comparisons in Selection Sort 
 long long measureSelectionSortComparisons(int arr[], int size) {
     long long comparisons = 0;
-    for (int i = 0; i < n; i++, comparisons++) {
+    for (int i = 0; i < size; i++, comparisons++) {
         int min = i;
-        for (int j = i + 1; j < n; j++, comparisons++) {
+        for (int j = i + 1; j < size; j++, comparisons++) {
             if (arr[j] < arr[min]) {
                 min = j;
                 comparisons++;
@@ -105,16 +105,16 @@ long long measureSelectionSortComparisons(int arr[], int size) {
 
 //Quick Sort
 int medianOfThree(int* arr, int start, int end) {
-    int mid = first + (last - first) / 2;
+    int mid = start + (end - start) / 2;
 
-    if (arr[mid] < arr[first]) swap(arr[mid], arr[first]);
-    if (arr[last] < arr[first]) swap(arr[last], arr[first]);
-    if (arr[mid] < arr[last]) swap(arr[mid], arr[last]);
+    if (arr[mid] < arr[start]) swap(arr[mid], arr[start]);
+    if (arr[end] < arr[start]) swap(arr[end], arr[start]);
+    if (arr[mid] < arr[end]) swap(arr[mid], arr[end]);
 
-    int pivot = arr[last]; 
-    int i = first - 1;
+    int pivot = arr[end]; 
+    int i = start - 1;
 
-    for (int j = first; j < last; j++) {
+    for (int j = start; j < end; j++) {
         if (arr[j] < pivot) {
             i++;
             swap(arr[i], arr[j]);
@@ -126,9 +126,9 @@ int medianOfThree(int* arr, int start, int end) {
 
 void quickSort(int* arr, int start, int end) {
     if (first < last) {
-        int pivotIndex = medianOfThree(arr, first, last);
-        quickSort(arr, first, pivotIndex - 1);
-        quickSort(arr, pivotIndex + 1, last);
+        int pivotIndex = medianOfThree(arr, start, end);
+        quickSort(arr, start, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, end);
     }
 }
 
@@ -136,19 +136,19 @@ void quickSort(int* arr, int start, int end) {
 
 //Functions to count the number of comparisons in Quick Sort 
 int measureMedianOfThreeComparisons(int* arr, int start, int end, long long& countComp) {
-    int mid = first + (last - first) / 2;
+    int mid = start + (end - start) / 2;
 
     countComp++;
-    if (arr[mid] < arr[first]) swap(arr[mid], arr[first]);
+    if (arr[mid] < arr[start]) swap(arr[mid], arr[start]);
     countComp++;
-    if (arr[last] < arr[first]) swap(arr[last], arr[first]);
+    if (arr[end] < arr[start]) swap(arr[end], arr[start]);
     countComp++;
-    if (arr[mid] < arr[last]) swap(arr[mid], arr[last]);
+    if (arr[mid] < arr[end]) swap(arr[mid], arr[end]);
 
-    int pivot = arr[last];
-    int i = first - 1;
+    int pivot = arr[end];
+    int i = start - 1;
 
-    for (int j = first; j < last; j++, countComp++) {
+    for (int j = start; j < end; j++, countComp++) {
         countComp++;
         if (arr[j] < pivot) {
             countComp++;
@@ -163,9 +163,9 @@ int measureMedianOfThreeComparisons(int* arr, int start, int end, long long& cou
 long long measureQuickSortComparisons(int* arr, int start, int end, long long& countComp) {
     if (first < last) {
     countComp++;
-        int pivotIndex = measureMedianOfThreeComparisons(arr, first, last, countComp);
-        measureQuickSortComparisons(arr, first, pivotIndex - 1, countComp);
-        measureQuickSortComparisons(arr, pivotIndex + 1, last, countComp);
+        int pivotIndex = measureMedianOfThreeComparisons(arr, start, end, countComp);
+        measureQuickSortComparisons(arr, start, pivotIndex - 1, countComp);
+        measureQuickSortComparisons(arr, pivotIndex + 1, end, countComp);
     }
     return countComp;
 }
