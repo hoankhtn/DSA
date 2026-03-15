@@ -321,3 +321,130 @@ void countingSort(int arr_o[], int size) {
 long long  measureCountingSortComparisons(int arr_o[], int size) {
     
 }
+
+/************************************************ */
+
+//Flash Sort 
+void flashSort(int arr[], int size) {
+    if (size <= 1) return;
+    int m = static_cast<int>(size * 0.43);
+    if (m <= 2) m = 2;
+
+    vector<int> __L(m, 0);
+
+    int Mx = a[0], Mn = a[0];
+    for (int i = 1; i < n; ++i) {
+        if (Mx < arr[i]) Mx = a[i];
+        if (Mn > arr[i]) Mn = a[i];
+    }
+    if (Mx == Mn)
+        return;
+
+    auto getK = [&](int x) {
+        return static_cast<int>(1LL * (m - 1) * (x - Mn) / (Mx - Mn));
+        };
+
+    for (int i = 0; i < size; ++i)
+        ++__L[getK(a[i])];
+
+    for (int i = 1; i < m; ++i)
+        __L[i] += __L[i - 1];
+
+    int count = 0;
+    int i = 0;
+    while (count < size) {
+        int k = getK(a[i]);
+        while (i >= __L[k])
+            k = getK(arr[++i]);
+        int z = arr[i];
+        while (i != __L[k]) {
+            k = getK(z);
+            int y = arr[__L[k] - 1];
+            arr[--__L[k]] = z;
+            z = y;
+            ++count;
+        }
+    }
+
+    for (int k = 1; k < m; ++k) {
+        for (int i = __L[k] - 2; i >= __L[k - 1]; --i) {
+            if (arr[i] > arr[i + 1]) {
+                int t = arr[i], j = i;
+                while (t > arr[j + 1]) {
+                    arr[j] = arr[j + 1];
+                    ++j;
+                }
+                arr[j] = t;
+            }
+        }
+    }
+}
+/************************************************ */
+
+//The function to count the number of comparisons in Counting Sort
+long long measureFlashSortComparisons(int arr[], int size) {
+    if (size <= 1) return 0;
+    long long comparisons = 0;
+
+    int m = static_cast<int>(size * 0.43);
+    if (m <= 2) m = 2;
+
+    vector<int> __L(m, 0);
+
+    int Mx = arr[0], Mn = arr[0];
+    for (int i = 1; i < size; ++i) {
+        comparisons++;
+        if (Mx < arr[i]) Mx = arr[i];
+        
+        comparisons++; 
+        if (Mn > arr[i]) Mn = arr[i];
+    }
+
+    if (Mx == Mn) return comparisons;
+
+    auto getK = [&](int x) {
+        return static_cast<int>(1LL * (m - 1) * (x - Mn) / (Mx - Mn));
+    };
+
+    for (int i = 0; i < size; ++i)
+        ++__L[getK(arr[i])];
+
+    for (int i = 1; i < m; ++i)
+        __L[i] += __L[i - 1];
+
+    int count = 0;
+    int i = 0;
+    while (count < size) {
+        int k = getK(arr[i]);
+        while (i >= __L[k]) {
+            k = getK(arr[++i]);
+        }
+        int z = arr[i];
+        while (i != __L[k]) {
+            k = getK(z);
+            int y = arr[__L[k] - 1];
+            arr[--__L[k]] = z;
+            z = y;
+            ++count;
+        }
+    }
+
+    for (int k = 1; k < m; ++k) {
+        for (int j = __L[k] - 2; j >= __L[k - 1]; --j) {
+            comparisons++; 
+            if (arr[j] > arr[j + 1]) {
+                int t = arr[j], l = j;
+                while (t > arr[l + 1]) {
+                    comparisons++; 
+                    arr[l] = arr[l + 1];
+                    ++l;
+                }
+                arr[l] = t;
+                comparisons++; 
+            }
+        }
+    }
+    
+    return comparisons;
+}
+/************************************************ */
